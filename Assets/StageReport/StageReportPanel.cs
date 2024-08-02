@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 namespace StageReport
 {
@@ -17,6 +18,8 @@ namespace StageReport
         public string interactableIconPrefabKey;
 
         public GameObject interactablePanel;
+
+        public InteractablesCollection interactablesCollection;
 
         public string stageLabelText;
         public Vector3 stageLabelScale;
@@ -32,7 +35,7 @@ namespace StageReport
             GameObject interactableIconPrefab = Addressables.LoadAssetAsync<GameObject>(interactableIconPrefabKey).WaitForCompletion();
 
             var stageReportLabel = Instantiate(labelPrefab, transform);
-            
+
             RectTransform labelRect = (RectTransform)stageReportLabel.transform;
             labelRect.localScale = stageLabelScale;
             labelRect.pivot = stageLabelPivot;
@@ -43,9 +46,20 @@ namespace StageReport
             textMesh.color = stageLabelColor;
             textMesh.fontSize = stageLabelFontSize;
 
-            for (int i = 0; i < interactableIconCount; i++)
+            int i = 0;
+            foreach (var interactableDef in interactablesCollection.interactables)
             {
                 var interactableIcon = Instantiate(interactableIconPrefab, interactablePanel.transform);
+
+                RawImage rawImage = interactableIcon.GetComponent<RawImage>();
+                rawImage.texture = interactableDef.texture;
+
+                var stackText = interactableIcon.transform.GetChild(0);
+                HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
+                stackLabel.text = $"{i}/{i + 2}";
+
+                i++;
+                i = i % 8;
             }
         }
     }
