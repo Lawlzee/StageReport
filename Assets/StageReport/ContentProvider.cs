@@ -12,7 +12,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-namespace ProceduralStages
+namespace StageReport
 {
     public class ContentProvider : IContentPackProvider
     {

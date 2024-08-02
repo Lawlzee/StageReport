@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProceduralStages
+namespace StageReport
 {
     public class ProfilerLog : IDisposable
     {

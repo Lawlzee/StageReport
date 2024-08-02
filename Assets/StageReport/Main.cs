@@ -15,9 +15,9 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-[assembly: HG.Reflection.SearchableAttribute.OptIn]
+//[assembly: HG.Reflection.SearchableAttribute.OptIn]
 
-namespace ProceduralStages
+namespace StageReport
 {
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]

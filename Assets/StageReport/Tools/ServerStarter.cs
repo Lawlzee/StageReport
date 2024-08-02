@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ProceduralStages
+namespace StageReport
 {
     [DefaultExecutionOrder(-100)]
     public class ServerStarter : MonoBehaviour

@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace ProceduralStages
+namespace StageReport
 {
 #if UNITY_EDITOR
     public class InstantiatePrefabFromKey : EditorWindow
