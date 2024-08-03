@@ -16,7 +16,10 @@ MonoBehaviour:
   - ThunderKit/Libraries
   assetBundles:
   - assetBundleName: stageReport
-    assets: []
+    assets:
+    - {fileID: 697144701561862794, guid: c74ddc4f9f15200438630d6af92b2008, type: 3}
+    - {fileID: 11400000, guid: a4a930927ab3afd4b88dd3e4c68a39b5, type: 2}
+    - {fileID: 2128301634565239587, guid: 16f2879daa209874d98272a35cf42a45, type: 3}
 --- !u!114 &-6844045057250356348
 MonoBehaviour:
   m_ObjectHideFlags: 0

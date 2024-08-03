@@ -39,6 +39,9 @@ namespace StageReport
             ModSettingsManager.SetModIcon(sprite);
             //ModSettingsManager.SetModDescription("Procedural Stages replaces conventional static terrains with procedurally generated environments, offering a fresh and varied experience with each stage while striving to maintain the familiar feel of vanilla stages.");
 
+            RunHooks.Init();
+            InteractableHooks.Init();
+
             /*
             PauseMenu.Init();
 

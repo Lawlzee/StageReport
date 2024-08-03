@@ -18,9 +18,10 @@ namespace StageReport
     {
         public string identifier => Main.PluginGUID + "." + nameof(ContentProvider);
 
-        public static string assetDirectory;
-
         public static ContentPack ContentPack = new ContentPack();
+
+        public static GameObject interactableTrackerPrefab;
+        public static GameObject stageReportPanelPrefab;
 
         public ContentProvider()
         {
@@ -31,7 +32,7 @@ namespace StageReport
             ContentPack.identifier = identifier;
 
             var assetsFolderFullPath = System.IO.Path.GetDirectoryName(typeof(ContentProvider).Assembly.Location);
-            assetDirectory = assetsFolderFullPath;
+            string assetDirectory = assetsFolderFullPath;
 
             AssetBundle stageReportBundle = null;
             yield return LoadAssetBundle(
@@ -39,27 +40,22 @@ namespace StageReport
                 args.progressReceiver,
                 (assetBundle) => stageReportBundle = assetBundle);
 
-            //yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<Texture[]>)((assets) =>
-            //{
-            //    texOpenCavePreview = assets.First(a => a.name == "texOpenCavePreview");
-            //    texTunnelCavesPreview = assets.First(a => a.name == "texTunnelCavesPreview");
-            //    texIslandPreview = assets.First(a => a.name == "texIslandPreview");
-            //    texCanyonsPreview = assets.First(a => a.name == "texCanyonsPreview");
-            //    texBasaltPreview = assets.First(a => a.name == "texBasaltPreview");
-            //    texBlockMazePreview = assets.First(a => a.name == "texBlockMazePreview");
-            //    texTemplePreview = assets.First(a => a.name == "texTemplePreview");
-            //}));
-            //
-            //yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
-            //{
-            //    runConfigPrefab = assets.First(a => a.name == "Run Config");
-            //    rampPrefab = assets.First(a => a.name == "Ramp");
-            //
-            //    foreach (var asset in assets)
-            //    {
-            //        ClientScene.RegisterPrefab(asset);
-            //    }
-            //}));
+            yield return LoadAllAssetsAsync(stageReportBundle, args.progressReceiver, (Action<InteractablesCollection[]>)((assets) =>
+            {
+                assets.First().Init();
+            }));
+            
+            yield return LoadAllAssetsAsync(stageReportBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
+            {
+                interactableTrackerPrefab = assets.First(a => a.name == "InteractableTracker");
+                stageReportPanelPrefab = assets.First(a => a.name == "StageReportPanel");
+                //rampPrefab = assets.First(a => a.name == "Ramp");
+            
+                foreach (var asset in assets)
+                {
+                    ClientScene.RegisterPrefab(asset);
+                }
+            }));
         }
 
         private IEnumerator LoadAssetBundle(string assetBundleFullPath, IProgress<float> progress, Action<AssetBundle> onAssetBundleLoaded)

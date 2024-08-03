@@ -11,12 +11,15 @@ namespace StageReport
     public class HudInstantier : MonoBehaviour
     {
         public GameObject stageReportPrefab;
+        public InteractablesCollection interactablesCollection;
+        public TrackedInteractable[] trackedInteractables;
         private bool initalised;
 
         void Awake()
         {
             if (Application.isPlaying)
             {
+                interactablesCollection.Init();
                 var cameraPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Core/Main Camera.prefab").WaitForCompletion();
                 var camera = Instantiate(cameraPrefab);
             }
@@ -40,7 +43,8 @@ namespace StageReport
                     var runHudPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ClassicRun/ClassicRunInfoHudPanel.prefab").WaitForCompletion();
                     GameObject runHub = Instantiate(runHudPrefab, upperRight);
 
-                    Instantiate(stageReportPrefab, springCanvas);
+                    StageReportPanel panel = Instantiate(stageReportPrefab, springCanvas).GetComponent<StageReportPanel>();
+                    panel.Render(trackedInteractables);
                 }
             }
         }

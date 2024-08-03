@@ -17,3 +17,5 @@ MonoBehaviour:
   texture: {fileID: 2800000, guid: 1d6ef84932db7ab4cbf9b1c3cce6061a, type: 3}
   charges: 1
   defaultScoreWeight: 25
+  gameObjectNames:
+  - CategoryChestDamage(Clone)

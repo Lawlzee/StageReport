@@ -166,3 +166,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageReportPrefab: {fileID: 2128301634565239587, guid: 16f2879daa209874d98272a35cf42a45,
     type: 3}
+  interactablesCollection: {fileID: 11400000, guid: a4a930927ab3afd4b88dd3e4c68a39b5,
+    type: 2}
+  trackedInteractables:
+  - type: 0
+    charges: 1
+    netId: 0
+  - type: 0
+    charges: 0
+    netId: 0
+  - type: 0
+    charges: 0
+    netId: 0
+  - type: 12
+    charges: 1
+    netId: 0
+  - type: 10
+    charges: 0
+    netId: 0
+  - type: 2
+    charges: 0
+    netId: 0
+  - type: 3
+    charges: 0
+    netId: 0
+  - type: 14
+    charges: 0
+    netId: 0
+  - type: 8
+    charges: 0
+    netId: 0
+  - type: 8
+    charges: 0
+    netId: 0

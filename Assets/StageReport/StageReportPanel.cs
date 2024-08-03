@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace StageReport
 {
-    [DefaultExecutionOrder(-100)]
+    //[DefaultExecutionOrder(-100)]
     public class StageReportPanel : MonoBehaviour
     {
         public string labelPrefabKey;
@@ -31,6 +31,10 @@ namespace StageReport
 
         public void Awake()
         {
+        }
+
+        public void Render(IList<TrackedInteractable> trackedInteractables)
+        {
             GameObject labelPrefab = Addressables.LoadAssetAsync<GameObject>(labelPrefabKey).WaitForCompletion();
             GameObject interactableIconPrefab = Addressables.LoadAssetAsync<GameObject>(interactableIconPrefabKey).WaitForCompletion();
 
@@ -46,9 +50,35 @@ namespace StageReport
             textMesh.color = stageLabelColor;
             textMesh.fontSize = stageLabelFontSize;
 
-            int i = 0;
-            foreach (var interactableDef in interactablesCollection.interactables)
+            //int i = 0;
+            //foreach (var interactableDef in InteractablesCollection.instance.interactables)
+            //{
+            //    var interactableIcon = Instantiate(interactableIconPrefab, interactablePanel.transform);
+            //
+            //    RawImage rawImage = interactableIcon.GetComponent<RawImage>();
+            //    rawImage.texture = interactableDef.texture;
+            //
+            //    var stackText = interactableIcon.transform.GetChild(0);
+            //    HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
+            //    stackLabel.text = $"{i}/{i + 2}";
+            //
+            //    i++;
+            //    i = i % 8;
+            //}
+
+            var interactableGroups = trackedInteractables
+                .GroupBy(x => x.type)
+                .OrderBy(x => x.Key)
+                .Select(kvp => (
+                    type: kvp.Key,
+                    charges: kvp.Select(x => x.charges).Sum(),
+                    count: kvp.Count()))
+                .ToList();
+
+            foreach (var interactableGroup in interactableGroups)
             {
+                var interactableDef = InteractablesCollection.instance[interactableGroup.type];
+
                 var interactableIcon = Instantiate(interactableIconPrefab, interactablePanel.transform);
 
                 RawImage rawImage = interactableIcon.GetComponent<RawImage>();
@@ -56,10 +86,7 @@ namespace StageReport
 
                 var stackText = interactableIcon.transform.GetChild(0);
                 HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
-                stackLabel.text = $"{i}/{i + 2}";
-
-                i++;
-                i = i % 8;
+                stackLabel.text = $"{interactableGroup.count - interactableGroup.charges / (float)interactableDef.charges:0.##}/{interactableGroup.count}";
             }
         }
     }

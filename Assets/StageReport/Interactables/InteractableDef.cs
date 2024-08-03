@@ -15,5 +15,6 @@ namespace StageReport
         public Texture2D texture;
         public int charges = 1;
         public int defaultScoreWeight;
+        public string[] gameObjectNames;
     }
 }
