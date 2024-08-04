@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49a8e7e0d0e08da428a79d57d8d6d842, type: 3}
-  m_Name: EquipmentBarrel
+  m_Name: EmergencyDrone
   m_EditorClassIdentifier: 
-  type: 13
-  nameToken: EQUIPMENTBARREL_NAME
-  texture: {fileID: 2800000, guid: f3c660d2590124f48bc3f188cba6e817, type: 3}
-  textureKey: 
+  type: 36
+  nameToken: EMERGENCYDRONE_BODY_NAME
+  texture: {fileID: 0}
+  textureKey: RoR2/Base/Drones/EmergencyDroneBody.png
   charges: 1
-  defaultScoreWeight: 25
+  defaultScoreWeight: 0
   gameObjectNames:
-  - EquipmentBarrel(Clone)
+  - EmergencyDroneBody(Clone)

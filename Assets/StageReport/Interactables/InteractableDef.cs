@@ -13,6 +13,7 @@ namespace StageReport
         public InteractableType type;
         public string nameToken;
         public Texture2D texture;
+        public string textureKey;
         public int charges = 1;
         public int defaultScoreWeight;
         public string[] gameObjectNames;

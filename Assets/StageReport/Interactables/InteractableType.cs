@@ -24,7 +24,6 @@ namespace StageReport
         RedMultishop,
 
 
-        ChanceShrine,
         AdaptiveChest,
 
         EquipmentBarrel,
@@ -32,6 +31,43 @@ namespace StageReport
 
         Lockbox,
         EncrustedCache,
+        CrashedMultishop,
+        CloakedChest,
+
+        LunarPod,
+
+        VoidCradle,
+        VoidPotential,
+        Barrel,
+        Stalk,
+
+        ChanceShrine,
+        BloodShrine,
+        CombatShrine,
+        MountaintShrine,
+        WoodShrine,
+        OrderShrine,
+        GoldShrine,
+
+        GunnerDrone,
+        HealingDrone,
+        MissileDrone,
+        IcineratorDrone,
+        EquipmentDrone,
+        EmergencyDrone,
+        TCDrone,
+        GunnerTurret,
+        //LemurianEgg,
+
+        NewtAltar,
+        TimedSecurityChest,
+        AlloyVultureNest,
+
+        WhitePrinter,
+        GreenPrinter,
+        RedPrinter,
+        YellowPrinter,
+        Scapper,
 
     }
 }
