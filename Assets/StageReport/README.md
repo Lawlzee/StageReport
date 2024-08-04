@@ -1,6 +1,6 @@
 # Stage Recap
 
-At the end of each stage, StageRecap shows all the interactables on the stage and how many you’ve collected. This helps players improve at full looting stages.
+At the end of each stage, StageRecap shows all the interactables on the stage and how many you've collected. This helps players improve at full looting stages.
 
 In multiplayer, the host must have the mod for it to work for other players.
 

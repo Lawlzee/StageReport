@@ -1,5 +1,5 @@
 {
-    "name": "StageReport",
+    "name": "StageRecap",
     "references": [
         "com.unity.multiplayer-hlapi.Runtime",
         "Unity.Postprocessing.Runtime"

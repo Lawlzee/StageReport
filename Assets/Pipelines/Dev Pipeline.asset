@@ -39,7 +39,7 @@ MonoBehaviour:
   SourceRequired: 1
   EstablishDestination: 1
   Source: <AssemblyStaging>
-  Destination: C:\Users\Lawlzee\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\ModDev\BepInEx\plugins\StageReport
+  Destination: C:\Users\Lawlzee\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\ModDev\BepInEx\plugins\StageRecap
 --- !u!114 &-2096335529722591823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,4 +148,4 @@ MonoBehaviour:
   Manifests: []
   ArchiveType: 1
   Source: <AssemblyStaging>
-  Output: <AssemblyStaging>\StageReport.zip
+  Output: <AssemblyStaging>\StageRecap.zip

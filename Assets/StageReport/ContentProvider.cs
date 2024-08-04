@@ -36,7 +36,7 @@ namespace StageReport
 
             AssetBundle stageReportBundle = null;
             yield return LoadAssetBundle(
-                System.IO.Path.Combine(assetsFolderFullPath, "stageReport"),
+                System.IO.Path.Combine(assetsFolderFullPath, "stageRecap"),
                 args.progressReceiver,
                 (assetBundle) => stageReportBundle = assetBundle);
 

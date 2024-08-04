@@ -15,7 +15,7 @@ MonoBehaviour:
   StagingPaths:
   - ThunderKit/Libraries
   assetBundles:
-  - assetBundleName: stageReport
+  - assetBundleName: stageRecap
     assets:
     - {fileID: 697144701561862794, guid: c74ddc4f9f15200438630d6af92b2008, type: 3}
     - {fileID: 11400000, guid: a4a930927ab3afd4b88dd3e4c68a39b5, type: 2}
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StagingPaths: []
   Author: Lawlzee
-  Name: StageReport
+  Name: StageRecap
   Description: 
   Version: 1
   Dependencies: []
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e563561e08b6a3642a487177f5cfbb37, type: 3}
-  m_Name: StageReport
+  m_Name: StageRecap
   m_EditorClassIdentifier: 
   Data:
   - {fileID: -1988881810315853451}
