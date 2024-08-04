@@ -22,32 +22,22 @@ namespace StageReport
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Main : BaseUnityPlugin
     {
-        public const string PluginGUID = "Lawlzee.StageReport";
+        public const string PluginGUID = "Lawlzee.StageRecap";
         public const string PluginAuthor = "Lawlzee";
-        public const string PluginName = "StageReport";
+        public const string PluginName = "StageRecap";
         public const string PluginVersion = "1.0.0";
 
         public void Awake()
         {
             Log.Init(Logger);
 
-            //ModConfig.Init(Config);
-
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
             ModSettingsManager.SetModIcon(sprite);
-            //ModSettingsManager.SetModDescription("Procedural Stages replaces conventional static terrains with procedurally generated environments, offering a fresh and varied experience with each stage while striving to maintain the familiar feel of vanilla stages.");
+            ModSettingsManager.SetModDescription("At the end of each stage, StageRecap shows all the interactables on the stage and how many you’ve collected. This helps players improve at full looting stages.");
 
             RunHooks.Init();
             InteractableHooks.Init();
-
-            /*
-            PauseMenu.Init();
-
-            BazaarHooks.Init();
-            ConfigHooks.Init();
-            StageHooks.Init();
-            */
 
             ContentManager.collectContentPackProviders += GiveToRoR2OurContentPackProviders;
         }

@@ -13,16 +13,23 @@ namespace StageReport
     {
         public static void Init()
         {
-            On.RoR2.PurchaseInteraction.PreStartClient += PurchaseInteraction_PreStartClient; ;
+            On.RoR2.PurchaseInteraction.PreStartClient += PurchaseInteraction_PreStartClient;
             On.RoR2.ShrineChanceBehavior.AddShrineStack += ShrineChanceBehavior_AddShrineStack;
 
             On.RoR2.MultiShopController.Start += MultiShopController_Start;
             On.RoR2.MultiShopController.OnPurchase += MultiShopController_OnPurchase;
             On.RoR2.BarrelInteraction.Start += BarrelInteraction_Start;
             On.RoR2.BarrelInteraction.CoinDrop += BarrelInteraction_CoinDrop;
+            On.RoR2.ScrapperController.Start += ScrapperController_Start;
             //On.RoR2.ChestBehavior.Start += ChestBehavior_Start;
             //On.RoR2.ChestBehavior.Open += ChestBehavior_Open;
             
+        }
+
+        private static void ScrapperController_Start(On.RoR2.ScrapperController.orig_Start orig, ScrapperController self)
+        {
+            orig(self);
+            TryRegistering("ScrapperController_Start", self);
         }
 
         private static void BarrelInteraction_CoinDrop(On.RoR2.BarrelInteraction.orig_CoinDrop orig, BarrelInteraction self)
@@ -40,37 +47,18 @@ namespace StageReport
         private static void BarrelInteraction_Start(On.RoR2.BarrelInteraction.orig_Start orig, BarrelInteraction self)
         {
             orig(self);
-
-            Log.Debug("BarrelInteraction_Start " + self.gameObject.name);
-            if (NetworkServer.active)
-            {
-                InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
-
-                if (interactableDef == null)
-                {
-                    Log.Debug("interactableDef not found");
-                    return;
-                }
-
-                Log.Debug(interactableDef.type + " found");
-
-                int index = InteractableTracker.instance.trackedInteractables.Count;
-                var trackedInteractable = new TrackedInteractable
-                {
-                    netId = self.GetComponent<NetworkIdentity>().netId.Value,
-                    type = interactableDef.type,
-                    charges = interactableDef.charges
-                };
-
-                InteractableTracker.instance.trackedInteractables.Add(trackedInteractable);
-            }
+            TryRegistering("BarrelInteraction_Start", self);
         }
 
         private static void MultiShopController_Start(On.RoR2.MultiShopController.orig_Start orig, MultiShopController self)
         {
             orig(self);
+            TryRegistering("MultiShopController_Start", self);
+        }
 
-            Log.Debug("MultiShopController_Start " + self.gameObject.name);
+        private static void TryRegistering(string caller, NetworkBehaviour self)
+        {
+            Log.Debug(caller + " " + self.gameObject.name);
             if (NetworkServer.active)
             {
                 InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
@@ -134,6 +122,12 @@ namespace StageReport
             Log.Debug("PurchaseInteraction_PreStartClient " + self.gameObject.name);
             if (NetworkServer.active)
             {
+                if (!self.gameObject.activeInHierarchy)
+                {
+                    Log.Debug("not active");
+                    return;
+                }
+
                 InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
 
                 if (interactableDef == null)

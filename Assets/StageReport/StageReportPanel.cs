@@ -139,7 +139,7 @@ namespace StageReport
                 }
                 else
                 {
-                    currentScore += interactableGroup.def.defaultScoreWeight * (1 - (interactableGroup.charges / (float)(interactableGroup.def.charges * interactableGroup.count)));
+                    currentScore += interactableGroup.def.defaultScoreWeight * (interactableGroup.count - (interactableGroup.charges / (float)interactableGroup.def.charges));
                     stackLabel.text = $"{interactableGroup.count - interactableGroup.charges / (float)interactableGroup.def.charges:0.##}/{interactableGroup.count}";
                 }
 

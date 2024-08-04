@@ -23,7 +23,6 @@ namespace StageReport
         LegendaryChest,
         RedMultishop,
 
-
         AdaptiveChest,
 
         EquipmentBarrel,
