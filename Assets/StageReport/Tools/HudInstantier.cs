@@ -20,6 +20,7 @@ namespace StageReport
             if (Application.isPlaying)
             {
                 interactablesCollection.Init();
+                ContentProvider.stageReportPanelPrefab = stageReportPrefab;
                 var cameraPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Core/Main Camera.prefab").WaitForCompletion();
                 var camera = Instantiate(cameraPrefab);
             }
@@ -29,6 +30,11 @@ namespace StageReport
         {
             if (Application.isPlaying)
             {
+                if (Input.GetKeyDown(KeyCode.F5))
+                {
+                    StageReportPanel.Toggle(trackedInteractables);
+                }
+
                 if (!initalised)
                 {
                     initalised = true;
@@ -41,10 +47,9 @@ namespace StageReport
                     Transform upperRight = springCanvas.Find("UpperRightCluster");
 
                     var runHudPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ClassicRun/ClassicRunInfoHudPanel.prefab").WaitForCompletion();
-                    GameObject runHub = Instantiate(runHudPrefab, upperRight);
+                    Instantiate(runHudPrefab, upperRight);
 
-                    StageReportPanel panel = Instantiate(stageReportPrefab, springCanvas).GetComponent<StageReportPanel>();
-                    panel.Render(trackedInteractables);
+                    StageReportPanel.Show(trackedInteractables);
                 }
             }
         }

@@ -20,3 +20,4 @@ MonoBehaviour:
   defaultScoreWeight: 0
   gameObjectNames:
   - Scrapper(Clone)
+  - Scrapper

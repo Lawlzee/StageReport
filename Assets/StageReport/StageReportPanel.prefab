@@ -155,12 +155,13 @@ MonoBehaviour:
   interactablePanel: {fileID: 4757755756064958337}
   interactablesCollection: {fileID: 11400000, guid: a4a930927ab3afd4b88dd3e4c68a39b5,
     type: 2}
-  stageLabelText: Stage Completed - 98%
+  stageLabelText: Stage Completed
   stageLabelScale: {x: 1.5, y: 1.5, z: 1.5}
   stageLabelPivot: {x: 0, y: -0.1}
   stageLabelColor: {r: 1, g: 1, b: 1, a: 1}
   stageLabelFontSize: 24
-  interactableIconCount: 17
+  interactableShowInitialDelay: 0.1
+  interactableShowDelay: 0.1
 --- !u!1 &4757755756064958337
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,13 +44,7 @@ namespace StageReport
         {
             if (self.exitState == SceneExitController.ExitState.Idle)
             {
-                var container = GameObject.Find("HUDSimple(Clone)").transform
-                    .Find("MainContainer")
-                    .Find("MainUIArea")
-                    .Find("SpringCanvas");
-
-                StageReportPanel stageReportPanel = UnityEngine.Object.Instantiate(ContentProvider.stageReportPanelPrefab, container).GetComponent<StageReportPanel>();
-                stageReportPanel.Render(InteractableTracker.instance.trackedInteractables);
+                StageReportPanel.Show(InteractableTracker.instance.trackedInteractables);
             }
             orig(self);
         }

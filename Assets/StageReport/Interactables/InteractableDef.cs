@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace StageReport
 {
@@ -17,5 +18,10 @@ namespace StageReport
         public int charges = 1;
         public int defaultScoreWeight;
         public string[] gameObjectNames;
+
+        private Texture2D _texture;
+        public Texture2D Texture => _texture == null
+            ? _texture = (texture != null ? texture : Addressables.LoadAssetAsync<Texture2D>(textureKey).WaitForCompletion())
+            : _texture;
     }
 }

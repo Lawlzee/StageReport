@@ -19,4 +19,4 @@ MonoBehaviour:
   charges: 3
   defaultScoreWeight: 25
   gameObjectNames:
-  - MultiShopEquipmentTerminal(Clone)
+  - TripleShopEquipment(Clone)

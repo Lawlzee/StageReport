@@ -15,7 +15,9 @@ MonoBehaviour:
   type: 5
   nameToken: CHEST2_NAME
   texture: {fileID: 2800000, guid: 027774e809cbf0242889a4ef3b561778, type: 3}
+  textureKey: 
   charges: 1
   defaultScoreWeight: 50
   gameObjectNames:
   - Chest2(Clone)
+  - Chest2

@@ -19,4 +19,4 @@ MonoBehaviour:
   charges: 3
   defaultScoreWeight: 50
   gameObjectNames:
-  - MultiShopLargeTerminal(Clone)
+  - TripleShopLarge(Clone)
