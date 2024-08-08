@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,14 @@ namespace StageReport
         public InteractableType type;
         public int charges;
         public uint netId;
+        public ItemIndex itemIndex;
 
         public bool Equals(TrackedInteractable other)
         {
             return type == other.type
                 && charges == other.charges
-                && netId == other.netId;
+                && netId == other.netId
+                && itemIndex == other.itemIndex;
         }
     }
 

@@ -21,9 +21,57 @@ namespace StageReport
             On.RoR2.BarrelInteraction.Start += BarrelInteraction_Start;
             On.RoR2.BarrelInteraction.CoinDrop += BarrelInteraction_CoinDrop;
             On.RoR2.ScrapperController.Start += ScrapperController_Start;
-            //On.RoR2.ChestBehavior.Start += ChestBehavior_Start;
-            //On.RoR2.ChestBehavior.Open += ChestBehavior_Open;
-            
+
+            On.RoR2.CharacterBody.Start += CharacterBody_Start;
+            On.RoR2.CharacterDeathBehavior.OnDeath += CharacterDeathBehavior_OnDeath;
+            On.RoR2.ShopTerminalBehavior.UpdatePickupDisplayAndAnimations += ShopTerminalBehavior_UpdatePickupDisplayAndAnimations;
+        }
+
+        private static void ShopTerminalBehavior_UpdatePickupDisplayAndAnimations(On.RoR2.ShopTerminalBehavior.orig_UpdatePickupDisplayAndAnimations orig, ShopTerminalBehavior self)
+        {
+            orig(self);
+            if (self.pickupIndex == PickupIndex.none)
+            {
+                return;
+            }
+
+            uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
+            int? index = FindInteractableIndex(netId);
+
+            if (index == null)
+            {
+                return;
+            }
+
+            TrackedInteractable trackedInteractable = InteractableTracker.instance.trackedInteractables[index.Value];
+            InteractableDef interactableDef = InteractablesCollection.instance[trackedInteractable.type];
+            if (!interactableDef.unstackable)
+            {
+                return;
+            }
+
+            PickupDef pickupDef = PickupCatalog.GetPickupDef(self.pickupIndex);
+            ItemDef itemDef = ItemCatalog.GetItemDef(pickupDef.itemIndex);
+            trackedInteractable.itemIndex = itemDef.itemIndex;
+
+
+            InteractableTracker.instance.trackedInteractables[index.Value] = trackedInteractable;
+        }
+
+        private static void CharacterDeathBehavior_OnDeath(On.RoR2.CharacterDeathBehavior.orig_OnDeath orig, CharacterDeathBehavior self)
+        {
+            orig(self);
+            if (NetworkServer.active)
+            {
+                uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
+                SetCharges(netId, 0);
+            }
+        }
+
+        private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        {
+            orig(self);
+            TryRegistering("CharacterBody_Start", self, log: false);
         }
 
         private static void ScrapperController_Start(On.RoR2.ScrapperController.orig_Start orig, ScrapperController self)
@@ -56,16 +104,22 @@ namespace StageReport
             TryRegistering("MultiShopController_Start", self);
         }
 
-        private static void TryRegistering(string caller, NetworkBehaviour self)
+        private static void TryRegistering(string caller, NetworkBehaviour self, bool log = true)
         {
-            Log.Debug(caller + " " + self.gameObject.name);
+            if (log)
+            {
+                Log.Debug(caller + " " + self.gameObject.name);
+            }
             if (NetworkServer.active)
             {
                 InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
 
                 if (interactableDef == null)
                 {
-                    Log.Debug("interactableDef not found");
+                    if (log)
+                    {
+                        Log.Debug("interactableDef not found");
+                    }
                     return;
                 }
 
@@ -148,7 +202,9 @@ namespace StageReport
 
                 InteractableTracker.instance.trackedInteractables.Add(trackedInteractable);
 
-                if (interactableDef.charges != 1)
+                if (interactableDef.charges != 1 
+                    && interactableDef.type != InteractableType.BloodShrine
+                    && interactableDef.type != InteractableType.WoodShrine)
                 {
                     Log.Debug("charges != 1");
                     return;
@@ -156,58 +212,10 @@ namespace StageReport
 
                 self.onPurchase.AddListener(interactor =>
                 {
-                    trackedInteractable.charges--;
+                    trackedInteractable.charges = Mathf.Max(0, trackedInteractable.charges - 1);
                     InteractableTracker.instance.trackedInteractables[index] = trackedInteractable;
                 });
             }
-        }
-
-        private static void ChestBehavior_Start(On.RoR2.ChestBehavior.orig_Start orig, RoR2.ChestBehavior self)
-        {
-            Log.Debug("ChestBehavior_Start " + self.gameObject.name);
-
-            if (NetworkServer.active)
-            {
-                InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
-
-                if (interactableDef == null)
-                {
-                    return;
-                }
-
-                Log.Debug(interactableDef.type + " found");
-
-                InteractableTracker.instance.trackedInteractables.Add(new TrackedInteractable
-                {
-                    netId = self.GetComponent<NetworkIdentity>().netId.Value,
-                    type = interactableDef.type,
-                    charges = interactableDef.charges
-                });
-            }
-
-            orig(self);
-        }
-
-        private static void ChestBehavior_Open(On.RoR2.ChestBehavior.orig_Open orig, RoR2.ChestBehavior self)
-        {
-            orig(self);
-
-            Log.Debug("ChestBehavior_Open " + self.gameObject.name);
-
-            uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
-            int? index = FindInteractableIndex(netId);
-
-            if (index == null)
-            {
-                return;
-            }
-
-            Log.Debug("ChestBehavior_Open " + netId);
-
-            var trackedInteractable = InteractableTracker.instance.trackedInteractables[index.Value];
-            trackedInteractable.charges--;
-
-            InteractableTracker.instance.trackedInteractables[index.Value] = trackedInteractable;
         }
 
         private static int? FindInteractableIndex(uint netId)

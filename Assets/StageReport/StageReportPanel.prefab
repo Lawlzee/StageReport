@@ -153,6 +153,8 @@ MonoBehaviour:
   labelPrefabKey: RoR2/Base/UI/DefaultLabel.prefab
   interactableIconPrefabKey: RoR2/Base/UI/ItemIcon.prefab
   interactablePanel: {fileID: 4757755756064958337}
+  printerItemIconPrefab: {fileID: 2712126373775790729, guid: ce958a85eda801e4d9f6e8eebe1b38cb,
+    type: 3}
   interactablesCollection: {fileID: 11400000, guid: a4a930927ab3afd4b88dd3e4c68a39b5,
     type: 2}
   stageLabelText: Stage Completed

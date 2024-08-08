@@ -1,4 +1,5 @@
-﻿using RoR2.UI;
+﻿using RoR2;
+using RoR2.UI;
 using RoR2.UI.SkinControllers;
 using System;
 using System.Collections;
@@ -12,13 +13,13 @@ using UnityEngine.UI;
 
 namespace StageReport
 {
-    //[DefaultExecutionOrder(-100)]
     public class StageReportPanel : MonoBehaviour
     {
         public string labelPrefabKey;
         public string interactableIconPrefabKey;
 
         public GameObject interactablePanel;
+        public GameObject printerItemIconPrefab;
 
         public InteractablesCollection interactablesCollection;
 
@@ -107,12 +108,22 @@ namespace StageReport
             GameObject interactableIconPrefab = Addressables.LoadAssetAsync<GameObject>(interactableIconPrefabKey).WaitForCompletion();
 
             var interactableGroups = trackedInteractables
-                .GroupBy(x => x.type)
+                .Select(x => (
+                    value: x,
+                    def: InteractablesCollection.instance[x.type]
+                ))
+                .GroupBy(x => (
+                    x.value.type,
+                    x.def.unstackable
+                        ? Guid.NewGuid()
+                        : Guid.Empty
+                ))
                 .Select(kvp => (
-                    type: kvp.Key,
-                    charges: kvp.Select(x => x.charges).Sum(),
+                    type: kvp.Key.type,
+                    itemIndex: kvp.First().value.itemIndex,
+                    charges: kvp.Select(x => x.value.charges).Sum(),
                     count: kvp.Count(),
-                    def: InteractablesCollection.instance[kvp.Key]
+                    def: kvp.First().def
                 ))
                 .OrderBy(x => InteractablesCollection.instance.GetOrder(x.type))
                 .ToList();
@@ -133,7 +144,14 @@ namespace StageReport
 
                 var stackText = interactableIcon.transform.GetChild(0);
                 HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
-                if (interactableGroup.def.charges == 0)
+
+                if (interactableGroup.def.unstackable)
+                {
+                    stackLabel.text = "";
+                    GameObject itemIcon = Instantiate(printerItemIconPrefab, interactableIcon.transform);
+                    itemIcon.GetComponent<RawImage>().texture = ItemCatalog.GetItemDef(interactableGroup.itemIndex).pickupIconTexture;
+                }
+                else if (interactableGroup.def.charges == 0)
                 {
                     stackLabel.text = interactableGroup.count.ToString();
                 }

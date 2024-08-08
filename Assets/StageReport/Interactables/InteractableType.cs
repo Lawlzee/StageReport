@@ -43,7 +43,7 @@ namespace StageReport
         ChanceShrine,
         BloodShrine,
         CombatShrine,
-        MountaintShrine,
+        MountainShrine,
         WoodShrine,
         OrderShrine,
         GoldShrine,
@@ -67,6 +67,7 @@ namespace StageReport
         RedPrinter,
         YellowPrinter,
         Scapper,
-
+        CleansingPool,
+        VultureEgg
     }
 }
