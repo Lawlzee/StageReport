@@ -25,8 +25,9 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 
 ## Todo
 
-1. Add missing interactables.
-2. Improve UI.
-3. Add a config option to choose which interactables to show on the recap.
-4. Add a config option to set the number of points each interactable gives.
-5. Display the number of credits available on the stage and the number spent.
+1. Improve UI.
+2. Add a config option to choose which interactables to show on the recap.
+3. Add a config option to set the number of points each interactable gives.
+4. Display the number of credits available on the stage and the number spent.
+5. Fix stage completion not showing in multiplayer.
+6. Show players the interactables they missed using the Radar Scanner.

@@ -1,6 +1,6 @@
 ﻿{
   "name": "StageRecap",
-  "version_number": "1.0.0",
+  "version_number": "1.1.0",
   "website_url": "https://github.com/Lawlzee/StageReport",
   "displayName": "Stage Recap",
   "description": "At the end of each stage, StageRecap shows all the interactables on the stage and how many you’ve collected. This helps players improve at full looting stages.",

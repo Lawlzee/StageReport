@@ -14,6 +14,7 @@ namespace StageReport
         public static void Init()
         {
             On.RoR2.PurchaseInteraction.PreStartClient += PurchaseInteraction_PreStartClient;
+            On.RoR2.PurchaseInteraction.OnDisable += PurchaseInteraction_OnDisable;
             On.RoR2.ShrineChanceBehavior.AddShrineStack += ShrineChanceBehavior_AddShrineStack;
 
             On.RoR2.MultiShopController.Start += MultiShopController_Start;
@@ -169,6 +170,24 @@ namespace StageReport
             }
         }
 
+        private static void PurchaseInteraction_OnDisable(On.RoR2.PurchaseInteraction.orig_OnDisable orig, PurchaseInteraction self)
+        {
+            orig(self);
+
+            Log.Debug("PurchaseInteraction_OnDisable" + self.gameObject.name);
+            if (NetworkServer.active)
+            {
+                uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
+                int? index = FindInteractableIndex(netId);
+
+                if (index != null)
+                {
+                    Log.Debug("Removed");
+                    InteractableTracker.instance.trackedInteractables.RemoveAt(index.Value);
+                }
+            }
+        }
+
         private static void PurchaseInteraction_PreStartClient(On.RoR2.PurchaseInteraction.orig_PreStartClient orig, PurchaseInteraction self)
         {
             orig(self);
@@ -176,12 +195,6 @@ namespace StageReport
             Log.Debug("PurchaseInteraction_PreStartClient " + self.gameObject.name);
             if (NetworkServer.active)
             {
-                if (!self.gameObject.activeInHierarchy)
-                {
-                    Log.Debug("not active");
-                    return;
-                }
-
                 InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
 
                 if (interactableDef == null)

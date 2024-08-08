@@ -1,17 +1,19 @@
 ## 1.1.0
-1. Added missing interactables
-    1. Blood Shrine
-    2. Boss Shrine
+1. Added missing interactables:
+    1. Shrine of Blood
+    2. Shrine of the Mountain
     3. Cleansing Pool
-    4. Gold Shrine
-    5. Healing Shrine
+    4. Altar of Gold
+    5. Shrine of the Woods
     6. Newt Altar
-    7. Order Shrine
-    8. Red Printer
-    9. Vulture eggs
-    10. White printer
+    7. Shrine of Order
+    8. Alloy Vulture Nests
+    9. White printer
+    10. Green printer
     11. Yellow printer
-2. Fixes adaptive chest counter 
+    12. Red Printer
+2. Fixed Adaptive Chest counter.
+3. Preplaced interactables that are disabled are no longer counted
 
 ## 1.0.0
 

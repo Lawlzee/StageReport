@@ -18,6 +18,15 @@ MonoBehaviour:
   textureKey: 
   charges: 1
   defaultScoreWeight: 0
+  unstackable: 0
   gameObjectNames:
   - NewtStatue
   - NewtStatue(Clone)
+  - NewtStatueWaterfall
+  - NewtStatue (1)
+  - NewtStatue (2)
+  - NewtStatue (3)
+  - NewtStatue (4)
+  - NewtStatue, Guaranteed
+  - NewtStatue (Permanent)
+  - NewtStatueCaveWall
