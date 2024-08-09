@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: IncineratorDrone
   m_EditorClassIdentifier: 
   type: 34
-  nameToken: RoR2/Base/Drones/FlameDroneBody.png
+  nameToken: FLAMEDRONE_INTERACTABLE_NAME
   texture: {fileID: 0}
   textureKey: RoR2/Base/Drones/FlameDroneBody.png
   charges: 1
   defaultScoreWeight: 0
+  unstackable: 0
   gameObjectNames:
   - FlameDroneBroken(Clone)

@@ -15,7 +15,9 @@ MonoBehaviour:
   type: 6
   nameToken: CATEGORYCHEST2_DAMAGE_NAME
   texture: {fileID: 2800000, guid: c950892f8258f164d92b6aa3e782c2f9, type: 3}
+  textureKey: 
   charges: 1
   defaultScoreWeight: 50
+  unstackable: 0
   gameObjectNames:
   - CategoryChest2Damage Variant(Clone)

@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: WhiteMultishop
   m_EditorClassIdentifier: 
   type: 4
-  nameToken: MULTISHOP_TERMINAL_NAME
+  nameToken: White MULTISHOP_TERMINAL_NAME
   texture: {fileID: 2800000, guid: 513a3682f8d4cd34fbd39d62a3843bde, type: 3}
+  textureKey: 
   charges: 3
   defaultScoreWeight: 25
+  unstackable: 0
   gameObjectNames:
   - TripleShop(Clone)

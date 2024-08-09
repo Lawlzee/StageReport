@@ -17,7 +17,8 @@ MonoBehaviour:
   texture: {fileID: 2800000, guid: 02663080d73a41c4595bcf814827c970, type: 3}
   textureKey: 
   charges: 1
-  defaultScoreWeight: 400
+  defaultScoreWeight: 100
+  unstackable: 0
   gameObjectNames:
   - GoldChest(Clone)
   - GoldChest

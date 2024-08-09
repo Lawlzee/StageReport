@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ShippingForm
   m_EditorClassIdentifier: 
   type: 49
-  nameToken: Crashed Multishop "Delivery"
+  nameToken: ITEM_FREECHEST_NAME
   texture: {fileID: 2800000, guid: 9ac4d82de4473964faaab4b114564aa3, type: 3}
   textureKey: 
   charges: 2
-  defaultScoreWeight: 0
+  defaultScoreWeight: 25
   unstackable: 0
   gameObjectNames:
   - FreeChestMultiShop(Clone)

@@ -3,6 +3,8 @@
 2. Added shorm
 3. Fixed vulture egg count
 4. Added radar
+5. Add configs to choose the visible interactables on the stage recap
+6. Add configs to choose how many points does each interactable stage adds to the completion percentage
 
 ## 1.1.0
 1. Added missing interactables:

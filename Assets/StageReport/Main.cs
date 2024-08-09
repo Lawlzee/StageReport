@@ -36,6 +36,11 @@ namespace StageReport
             ModSettingsManager.SetModIcon(sprite);
             ModSettingsManager.SetModDescription("At the end of each stage, StageRecap shows all the interactables on the stage and how many you’ve collected. This helps players improve at full looting stages.");
 
+            RoR2Application.onLoad += () =>
+            {
+                ModConfig.Init(Config);
+            };
+
             RunHooks.Init();
             InteractableHooks.Init();
             //ChestRevealerHooks.Init();

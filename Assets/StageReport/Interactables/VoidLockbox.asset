@@ -17,6 +17,7 @@ MonoBehaviour:
   texture: {fileID: 2800000, guid: 3ed07cd4090944449927707b40988871, type: 3}
   textureKey: 
   charges: 1
-  defaultScoreWeight: 0
+  defaultScoreWeight: 25
+  unstackable: 0
   gameObjectNames:
   - LockboxVoid(Clone)

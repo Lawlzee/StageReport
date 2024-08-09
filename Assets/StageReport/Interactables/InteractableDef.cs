@@ -16,6 +16,7 @@ namespace StageReport
         public Texture2D texture;
         public string textureKey;
         public int charges = 1;
+        [Range(0, 100)]
         public int defaultScoreWeight;
         public bool unstackable;
         public string[] gameObjectNames;
@@ -24,5 +25,9 @@ namespace StageReport
         public Texture2D Texture => _texture == null
             ? _texture = (texture != null ? texture : Addressables.LoadAssetAsync<Texture2D>(textureKey).WaitForCompletion())
             : _texture;
+
+        public int score => Application.isEditor
+            ? defaultScoreWeight
+            : ModConfig.interactablesScore[type].Value;
     }
 }

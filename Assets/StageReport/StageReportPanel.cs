@@ -35,10 +35,6 @@ namespace StageReport
         public float interactableShowInitialDelay;
         public float interactableShowDelay;
 
-        public void Awake()
-        {
-        }
-
         public static void Show(IList<TrackedInteractable> trackedInteractables)
         {
             var container = GameObject.Find("HUDSimple(Clone)").transform
@@ -49,15 +45,17 @@ namespace StageReport
             StageReportPanel stageReportPanel = Instantiate(ContentProvider.stageReportPanelPrefab, container).GetComponent<StageReportPanel>();
             stageReportPanel.Render(trackedInteractables);
 
-            var chestScannePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scanner/ChestScanner.prefab").WaitForCompletion();
-            var chestScanner = Instantiate(chestScannePrefab, Camera.main.transform);
-            var revealer = chestScanner.GetComponent<ChestRevealer>();
-            revealer.radius = float.MaxValue;
-            revealer.pulseTravelSpeed *= 2;
-            //revealer.pulseEffectPrefab = null;
+            if (!Application.isEditor && ModConfig.revealInteractableOnStageEnd.Value)
+            {
+                var chestScannePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scanner/ChestScanner.prefab").WaitForCompletion();
+                var chestScanner = Instantiate(chestScannePrefab, Camera.main.transform);
+                var revealer = chestScanner.GetComponent<ChestRevealer>();
+                revealer.radius = float.MaxValue;
+                revealer.pulseTravelSpeed *= 2;
 
-            OnDestroyCallback.AddCallback(chestScanner, _ => ChestRevealerHooks.reportOpened = false);
-            ChestRevealerHooks.reportOpened = true;
+                OnDestroyCallback.AddCallback(chestScanner, _ => ChestRevealerHooks.reportOpened = false);
+                ChestRevealerHooks.reportOpened = true;
+            }
         }
 
         public static void Toggle(IList<TrackedInteractable> trackedInteractables)
@@ -95,22 +93,6 @@ namespace StageReport
             textMesh.color = stageLabelColor;
             textMesh.fontSize = stageLabelFontSize;
 
-            //int i = 0;
-            //foreach (var interactableDef in InteractablesCollection.instance.interactables)
-            //{
-            //    var interactableIcon = Instantiate(interactableIconPrefab, interactablePanel.transform);
-            //
-            //    RawImage rawImage = interactableIcon.GetComponent<RawImage>();
-            //    rawImage.texture = interactableDef.texture;
-            //
-            //    var stackText = interactableIcon.transform.GetChild(0);
-            //    HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
-            //    stackLabel.text = $"{i}/{i + 2}";
-            //
-            //    i++;
-            //    i = i % 8;
-            //}
-
             StartCoroutine(RenderInteractables(textMesh, trackedInteractables));
         }
 
@@ -121,6 +103,7 @@ namespace StageReport
             GameObject interactableIconPrefab = Addressables.LoadAssetAsync<GameObject>(interactableIconPrefabKey).WaitForCompletion();
 
             var interactableGroups = trackedInteractables
+                .Where(x => Application.isEditor || ModConfig.visibleInteractables[x.type].Value)
                 .Select(x => (
                     value: x,
                     def: InteractablesCollection.instance[x.type]
@@ -145,7 +128,7 @@ namespace StageReport
 
             float total = interactableGroups
                 .Where(x => x.def.charges > 0)
-                .Select(x => x.def.defaultScoreWeight * x.count)
+                .Select(x => x.def.score * x.count)
                 .Sum();
 
             foreach (var interactableGroup in interactableGroups)
@@ -177,7 +160,7 @@ namespace StageReport
                     float interactablePercent = 1 - interactableGroup.charges / ((float)interactableGroup.def.charges * interactableGroup.count);
                     stackLabel.color = numberRamp.GetPixelBilinear(interactablePercent, 0);
 
-                    currentScore += interactableGroup.def.defaultScoreWeight * (interactableGroup.count - (interactableGroup.charges / (float)interactableGroup.def.charges));
+                    currentScore += interactableGroup.def.score * (interactableGroup.count - (interactableGroup.charges / (float)interactableGroup.def.charges));
                     stackLabel.text = $"{interactableGroup.count - interactableGroup.charges / (float)interactableGroup.def.charges:0.##}/{interactableGroup.count}";
                 }
 
