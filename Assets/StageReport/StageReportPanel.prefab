@@ -162,6 +162,8 @@ MonoBehaviour:
   stageLabelPivot: {x: 0, y: -0.1}
   stageLabelColor: {r: 1, g: 1, b: 1, a: 1}
   stageLabelFontSize: 24
+  numberRamp: {fileID: 2800000, guid: 345ed837df56ad14398ef98573daabe3, type: 3}
+  noChargesColor: {r: 1, g: 1, b: 1, a: 1}
   interactableShowInitialDelay: 0.1
   interactableShowDelay: 0.1
 --- !u!1 &4757755756064958337

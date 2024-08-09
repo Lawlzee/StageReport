@@ -38,6 +38,7 @@ namespace StageReport
 
             RunHooks.Init();
             InteractableHooks.Init();
+            //ChestRevealerHooks.Init();
 
             ContentManager.collectContentPackProviders += GiveToRoR2OurContentPackProviders;
         }

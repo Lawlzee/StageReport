@@ -1,3 +1,9 @@
+## 1.2.0
+1. Added text color percent
+2. Added shorm
+3. Fixed vulture egg count
+4. Added radar
+
 ## 1.1.0
 1. Added missing interactables:
     1. Shrine of Blood

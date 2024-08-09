@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace StageReport
@@ -72,7 +73,24 @@ namespace StageReport
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
-            TryRegistering("CharacterBody_Start", self, log: false);
+            bool found = TryRegistering("CharacterBody_Start", self, log: false);
+            if (found)
+            {
+                OnDisableEvent disableEvent = self.gameObject.AddComponent<OnDisableEvent>();
+                disableEvent.action = new UnityEvent();
+                disableEvent.action.AddListener(() =>
+                {
+                    Log.Debug("CharacterBody_Disabled");
+                    uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
+                    int? index = FindInteractableIndex(netId);
+
+                    if (index != null)
+                    {
+                        Log.Debug("Removed");
+                        InteractableTracker.instance.trackedInteractables.RemoveAt(index.Value);
+                    }
+                });
+            }
         }
 
         private static void ScrapperController_Start(On.RoR2.ScrapperController.orig_Start orig, ScrapperController self)
@@ -105,7 +123,7 @@ namespace StageReport
             TryRegistering("MultiShopController_Start", self);
         }
 
-        private static void TryRegistering(string caller, NetworkBehaviour self, bool log = true)
+        private static bool TryRegistering(string caller, NetworkBehaviour self, bool log = true)
         {
             if (log)
             {
@@ -121,7 +139,7 @@ namespace StageReport
                     {
                         Log.Debug("interactableDef not found");
                     }
-                    return;
+                    return false;
                 }
 
                 Log.Debug(interactableDef.type + " found");
@@ -134,7 +152,10 @@ namespace StageReport
                 };
 
                 InteractableTracker.instance.trackedInteractables.Add(trackedInteractable);
+                return true;
             }
+
+            return false;
         }
 
         private static void MultiShopController_OnPurchase(On.RoR2.MultiShopController.orig_OnPurchase orig, MultiShopController self, Interactor interactor, PurchaseInteraction purchaseInteraction)
@@ -177,6 +198,12 @@ namespace StageReport
             Log.Debug("PurchaseInteraction_OnDisable" + self.gameObject.name);
             if (NetworkServer.active)
             {
+                if (self.gameObject.name.Contains("(Clone)"))
+                {
+                    Log.Debug("Contains (Clone)");
+                    return;
+                }
+
                 uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
                 int? index = FindInteractableIndex(netId);
 
@@ -231,7 +258,7 @@ namespace StageReport
             }
         }
 
-        private static int? FindInteractableIndex(uint netId)
+        public static int? FindInteractableIndex(uint netId)
         {
             return InteractableTracker.instance.trackedInteractables
                 .Select((x, i) => (

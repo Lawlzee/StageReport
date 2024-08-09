@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49a8e7e0d0e08da428a79d57d8d6d842, type: 3}
-  m_Name: EmergencyDrone
+  m_Name: ShippingForm
   m_EditorClassIdentifier: 
-  type: 36
-  nameToken: EMERGENCYDRONE_BODY_NAME
-  texture: {fileID: 0}
-  textureKey: RoR2/Base/Drones/EmergencyDroneBody.png
-  charges: 1
+  type: 49
+  nameToken: Crashed Multishop "Delivery"
+  texture: {fileID: 2800000, guid: 9ac4d82de4473964faaab4b114564aa3, type: 3}
+  textureKey: 
+  charges: 2
   defaultScoreWeight: 0
   unstackable: 0
   gameObjectNames:
-  - EmergencyDroneBroken(Clone)
+  - FreeChestMultiShop(Clone)

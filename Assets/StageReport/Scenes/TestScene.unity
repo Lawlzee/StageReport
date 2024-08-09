@@ -209,3 +209,7 @@ MonoBehaviour:
     charges: 0
     netId: 0
     itemIndex: 0
+  - type: 46
+    charges: 0
+    netId: 0
+    itemIndex: 0

@@ -68,6 +68,7 @@ namespace StageReport
         YellowPrinter,
         Scapper,
         CleansingPool,
-        VultureEgg
+        VultureEgg,
+        ShippingRequestForm
     }
 }

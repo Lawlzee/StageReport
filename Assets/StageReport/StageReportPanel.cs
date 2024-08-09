@@ -29,6 +29,9 @@ namespace StageReport
         public Color stageLabelColor;
         public int stageLabelFontSize;
 
+        public Texture2D numberRamp;
+        public Color noChargesColor;
+
         public float interactableShowInitialDelay;
         public float interactableShowDelay;
 
@@ -45,6 +48,16 @@ namespace StageReport
 
             StageReportPanel stageReportPanel = Instantiate(ContentProvider.stageReportPanelPrefab, container).GetComponent<StageReportPanel>();
             stageReportPanel.Render(trackedInteractables);
+
+            var chestScannePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scanner/ChestScanner.prefab").WaitForCompletion();
+            var chestScanner = Instantiate(chestScannePrefab, Camera.main.transform);
+            var revealer = chestScanner.GetComponent<ChestRevealer>();
+            revealer.radius = float.MaxValue;
+            revealer.pulseTravelSpeed *= 2;
+            //revealer.pulseEffectPrefab = null;
+
+            OnDestroyCallback.AddCallback(chestScanner, _ => ChestRevealerHooks.reportOpened = false);
+            ChestRevealerHooks.reportOpened = true;
         }
 
         public static void Toggle(IList<TrackedInteractable> trackedInteractables)
@@ -149,14 +162,21 @@ namespace StageReport
                 {
                     stackLabel.text = "";
                     GameObject itemIcon = Instantiate(printerItemIconPrefab, interactableIcon.transform);
-                    itemIcon.GetComponent<RawImage>().texture = ItemCatalog.GetItemDef(interactableGroup.itemIndex).pickupIconTexture;
+                    if (!Application.isEditor)
+                    {
+                        itemIcon.GetComponent<RawImage>().texture = ItemCatalog.GetItemDef(interactableGroup.itemIndex).pickupIconTexture;
+                    }
                 }
                 else if (interactableGroup.def.charges == 0)
                 {
                     stackLabel.text = interactableGroup.count.ToString();
+                    stackLabel.color = noChargesColor;
                 }
                 else
                 {
+                    float interactablePercent = 1 - interactableGroup.charges / ((float)interactableGroup.def.charges * interactableGroup.count);
+                    stackLabel.color = numberRamp.GetPixelBilinear(interactablePercent, 0);
+
                     currentScore += interactableGroup.def.defaultScoreWeight * (interactableGroup.count - (interactableGroup.charges / (float)interactableGroup.def.charges));
                     stackLabel.text = $"{interactableGroup.count - interactableGroup.charges / (float)interactableGroup.def.charges:0.##}/{interactableGroup.count}";
                 }
