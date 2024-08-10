@@ -28,4 +28,3 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 
 1. Improve UI.
 2. Display the number of credits available on the stage and the number spent.
-3. Fix stage completion not showing in multiplayer.

@@ -43,5 +43,14 @@ namespace StageReport
         {
             instance = null;
         }
+
+        [ClientRpc]
+        public void RpcShowRecap()
+        {
+            if (ModConfig.modEnabled.Value)
+            {
+                StageReportPanel.Show(trackedInteractables);
+            }
+        }
     }
 }

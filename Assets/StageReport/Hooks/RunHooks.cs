@@ -42,9 +42,9 @@ namespace StageReport
 
         private static void SceneExitController_Begin(On.RoR2.SceneExitController.orig_Begin orig, SceneExitController self)
         {
-            if (self.exitState == SceneExitController.ExitState.Idle && ModConfig.modEnabled.Value)
+            if (self.exitState == SceneExitController.ExitState.Idle)
             {
-                StageReportPanel.Show(InteractableTracker.instance.trackedInteractables);
+                InteractableTracker.instance.RpcShowRecap();
             }
             orig(self);
         }
