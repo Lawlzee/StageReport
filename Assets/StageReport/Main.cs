@@ -25,7 +25,7 @@ namespace StageReport
         public const string PluginGUID = "Lawlzee.StageRecap";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "StageRecap";
-        public const string PluginVersion = "1.1.0";
+        public const string PluginVersion = "1.2.0";
 
         public void Awake()
         {

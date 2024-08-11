@@ -24,7 +24,7 @@ namespace StageReport
             modEnabled = config.Bind("Configuration", "Mod enabled", true, "Mod enabled");
             ModSettingsManager.AddOption(new CheckBoxOption(modEnabled));
 
-            revealInteractableOnStageEnd = config.Bind("Configuration", "Reveal interactables on stage end", true, "When the stage recap is shown at the end of the stage, reveal all interactables on the stage, like the Radar Scanner.");
+            revealInteractableOnStageEnd = config.Bind("Configuration", "Reveal interactables on stage end", true, "When the stage recap is shown, the Radar Scanner effect is now activated to show missed interactables.");
             ModSettingsManager.AddOption(new CheckBoxOption(revealInteractableOnStageEnd));
 
             var interactableDefs = InteractablesCollection.instance.interactables;
@@ -42,7 +42,7 @@ namespace StageReport
                 ModSettingsManager.AddOption(new CheckBoxOption(visibleConfig));
                 visibleInteractables[interactableDef.type] = visibleConfig;
 
-                var scoreConfig = config.Bind("Score", normalisedName, interactableDef.defaultScoreWeight, $"How many points does <style=cIsHealing>{name}</style> add  to the stage completion percentage?");
+                var scoreConfig = config.Bind("Score", normalisedName, interactableDef.defaultScoreWeight, $"How many points does <style=cIsHealing>{name}</style> add to the stage completion percentage?");
                 ModSettingsManager.AddOption(new IntSliderOption(scoreConfig, new IntSliderConfig { min = 0, max = 100 }));
                 interactablesScore[interactableDef.type] = scoreConfig;
             }

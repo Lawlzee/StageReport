@@ -4,7 +4,7 @@ At the end of each stage, StageRecap shows all the interactables on the stage an
 
 In multiplayer, the host must have the mod for it to work for other players.
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/StageReport/master/Assets/StageReport/Images/Example.png)
+![screenshot](https://raw.githubusercontent.com/Lawlzee/StageReport/master/Assets/StageReport/Images/Example2.png)
 
 [Changelog](https://thunderstore.io/package/Lawlzee/StageRecap/changelog/)
 
@@ -15,9 +15,9 @@ You can edit the configuration in `Settings > Mod Options > StageRecap`. All con
 | Category      | Name                 | Default value    | Description                                                                                                                                                                      |
 |---------------|----------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|                                        
 | Configuration | Mod enabled          | true             | Mod enabled |
-| Configuration | Reveal interactables on stage end | true | When the stage recap is shown at the end of the stage, reveal all interactables on the stage, like the Radar Scanner. |
+| Configuration | Reveal interactables on stage end | true | When the stage recap is shown, the Radar Scanner effect is now activated to show missed interactables. |
 | Visible       | `<interactable name>`| true             | Is `<interactable name>` shown in the stage recap? |
-| Score         | `<interactable name>`| -                | How many points does `<interactable name>` add  to the stage completion percentage? |
+| Score         | `<interactable name>`| -                | How many points does `<interactable name>` add to the stage completion percentage? |
 
 ## Report an issue
 

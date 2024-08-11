@@ -1,11 +1,11 @@
 ## 1.2.0
-1. Added text color percent
-2. Added shorm
-3. Fixed vulture egg count
-4. Added radar
-5. Add configs to choose the visible interactables on the stage recap
-6. Add configs to choose how many points does each interactable stage adds to the completion percentage
-7. Fixed stage completion not showing in multiplayer
+1. Interactable counts are now color-coded to make it easier to identify which interactables were not collected.
+2. When the stage recap is shown, the Radar Scanner effect is now activated to show missed interactables. This can be disabled in the config.
+3. Shipping Request Forms are now tracked.
+4. Added configuration options to choose which interactables are shown in the stage recap.
+5. Added configuration options to adjust the completion percentage points for each interactable.
+6. Disabled vulture eggs are no longer counted.
+7. Fixed an issue where the stage recap was not displaying in multiplayer.
 
 ## 1.1.0
 1. Added missing interactables:
@@ -25,5 +25,4 @@
 3. Preplaced interactables that are disabled are no longer counted
 
 ## 1.0.0
-
 - First release
