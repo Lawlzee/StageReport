@@ -37,7 +37,7 @@ namespace StageReport
 
         public static void Show(IList<TrackedInteractable> trackedInteractables)
         {
-            var container = GameObject.Find("HUDSimple(Clone)").transform
+            var container = (GameObject.Find("HUDSimple(Clone)") ?? GameObject.Find("RiskUI(Clone)")).transform
                 .Find("MainContainer")
                 .Find("MainUIArea")
                 .Find("SpringCanvas");
@@ -60,7 +60,7 @@ namespace StageReport
 
         public static void Toggle(IList<TrackedInteractable> trackedInteractables)
         {
-            GameObject currentPanel = GameObject.Find("HUDSimple(Clone)").transform
+            GameObject currentPanel = (GameObject.Find("HUDSimple(Clone)") ?? GameObject.Find("RiskUI(Clone)")).transform
                 .Find("MainContainer")
                 .Find("MainUIArea")
                 .Find("SpringCanvas")

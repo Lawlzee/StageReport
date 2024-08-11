@@ -1,3 +1,6 @@
+## 1.3.0
+1. Added RiskUI support
+
 ## 1.2.0
 1. Interactable counts are now color-coded to make it easier to identify which interactables were not collected.
 2. When the stage recap is shown, the Radar Scanner effect is now activated to show missed interactables. This can be disabled in the config.
