@@ -30,3 +30,10 @@ MonoBehaviour:
   - NewtStatue, Guaranteed
   - NewtStatue (Permanent)
   - NewtStatueCaveWall
+  - NewtStatue_City
+  - NewtStatue_LavaPlains
+  - NewtStatue_BackPlaza
+  - NewtStatue_LoneTower
+  - NewtStatue_Guaranteed_WormHead
+  - NewtStatue_CliffEdge
+  - NewtStatueShipParts

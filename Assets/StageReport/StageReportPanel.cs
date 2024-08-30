@@ -140,6 +140,7 @@ namespace StageReport
 
                 var stackText = interactableIcon.transform.GetChild(0);
                 HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
+                stackText.gameObject.SetActive(true);
 
                 if (interactableGroup.def.unstackable)
                 {

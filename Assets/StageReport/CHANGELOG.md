@@ -1,5 +1,10 @@
 ## 1.3.0
-1. Added RiskUI support
+1. Added Seekers of the Storm support
+2. Added Seekers of the Storm interactables
+    1. Halcyon Shrine
+    2. Shrine of Shaping
+    3. Aurelionite Geode 
+3. Added RiskUI support
 
 ## 1.2.0
 1. Interactable counts are now color-coded to make it easier to identify which interactables were not collected.

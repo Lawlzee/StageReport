@@ -69,6 +69,10 @@ namespace StageReport
         Scapper,
         CleansingPool,
         VultureEgg,
-        ShippingRequestForm
+        ShippingRequestForm,
+
+        ShrineColossusAccess,
+        ShrineHalcyonite,
+        Geode
     }
 }
