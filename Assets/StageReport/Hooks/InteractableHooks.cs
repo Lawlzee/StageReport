@@ -20,19 +20,65 @@ namespace StageReport
 
             On.RoR2.MultiShopController.Start += MultiShopController_Start;
             On.RoR2.MultiShopController.OnPurchase += MultiShopController_OnPurchase;
+
+            On.RoR2.DroneVendorMultiShopController.Start += DroneVendorMultiShopController_Start; ;
+            On.RoR2.DroneVendorMultiShopController.OnPurchase += DroneVendorMultiShopController_OnPurchase; ;
+
+            On.RoR2.AccessCodesMissionController.OnStartServer += AccessCodesMissionController_OnStartServer; ;
+            On.RoR2.AccessCodesMissionController.ActivateCode += AccessCodesMissionController_ActivateCode;
+
             On.RoR2.BarrelInteraction.Start += BarrelInteraction_Start;
             On.RoR2.BarrelInteraction.CoinDrop += BarrelInteraction_CoinDrop;
-            On.RoR2.ScrapperController.Start += ScrapperController_Start;
+            On.RoR2.ScrapperController.PreStartClient += ScrapperController_PreStartClient;
 
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.CharacterDeathBehavior.OnDeath += CharacterDeathBehavior_OnDeath;
             On.RoR2.ShopTerminalBehavior.UpdatePickupDisplayAndAnimations += ShopTerminalBehavior_UpdatePickupDisplayAndAnimations;
         }
 
+        private static void AccessCodesMissionController_OnStartServer(On.RoR2.AccessCodesMissionController.orig_OnStartServer orig, AccessCodesMissionController self)
+        {
+            orig(self);
+            Log.Debug("AccessCodesMissionController_OnStartServer " + self.gameObject.name);
+
+            if (NetworkServer.active)
+            {
+                bool flag = self.ignoreSolusWingDeath || !Run.instance.GetEventFlag("SolusWingBeaten");
+                if (self.RunHasRequiredExpansion() & flag)
+                {
+                    if (self.nodes.Length > 0)
+                    {
+                        InteractableDef interactableDef = InteractablesCollection.instance[InteractableType.AccessCodesNode];
+
+                        Log.Debug(interactableDef.type + " found");
+
+                        var trackedInteractable = new TrackedInteractable
+                        {
+                            netId = self.GetComponent<NetworkIdentity>().netId.Value,
+                            type = interactableDef.type,
+                            charges = interactableDef.charges
+                        };
+
+                        InteractableTracker.instance.trackedInteractables.Add(trackedInteractable);
+                    }
+                }
+            }
+        }
+
+        private static void AccessCodesMissionController_ActivateCode(On.RoR2.AccessCodesMissionController.orig_ActivateCode orig, AccessCodesMissionController self)
+        {
+            orig(self);
+            if (NetworkServer.active)
+            {
+                uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
+                SetCharges(netId, 0);
+            }
+        }
+
         private static void ShopTerminalBehavior_UpdatePickupDisplayAndAnimations(On.RoR2.ShopTerminalBehavior.orig_UpdatePickupDisplayAndAnimations orig, ShopTerminalBehavior self)
         {
             orig(self);
-            if (self.pickupIndex == PickupIndex.none)
+            if (self.pickup.pickupIndex == PickupIndex.none)
             {
                 return;
             }
@@ -52,7 +98,7 @@ namespace StageReport
                 return;
             }
 
-            PickupDef pickupDef = PickupCatalog.GetPickupDef(self.pickupIndex);
+            PickupDef pickupDef = PickupCatalog.GetPickupDef(self.pickup.pickupIndex);
             ItemDef itemDef = ItemCatalog.GetItemDef(pickupDef.itemIndex);
             trackedInteractable.itemIndex = itemDef.itemIndex;
 
@@ -93,7 +139,7 @@ namespace StageReport
             }
         }
 
-        private static void ScrapperController_Start(On.RoR2.ScrapperController.orig_Start orig, ScrapperController self)
+        private static void ScrapperController_PreStartClient(On.RoR2.ScrapperController.orig_PreStartClient orig, ScrapperController self)
         {
             orig(self);
             TryRegistering("ScrapperController_Start", self);
@@ -121,6 +167,12 @@ namespace StageReport
         {
             orig(self);
             TryRegistering("MultiShopController_Start", self);
+        }
+
+        private static void DroneVendorMultiShopController_Start(On.RoR2.DroneVendorMultiShopController.orig_Start orig, DroneVendorMultiShopController self)
+        {
+            orig(self);
+            TryRegistering("DroneVendorMultiShopController_Start", self);
         }
 
         private static bool TryRegistering(string caller, NetworkBehaviour self, bool log = true)
@@ -158,17 +210,39 @@ namespace StageReport
             return false;
         }
 
-        private static void MultiShopController_OnPurchase(On.RoR2.MultiShopController.orig_OnPurchase orig, MultiShopController self, Interactor interactor, PurchaseInteraction purchaseInteraction)
+        private static void MultiShopController_OnPurchase(On.RoR2.MultiShopController.orig_OnPurchase orig, MultiShopController self, CostTypeDef.PayCostContext payCostContext, CostTypeDef.PayCostResults payCostResult)
         {
-            orig(self, interactor, purchaseInteraction);
+            orig(self, payCostContext, payCostResult);
 
             Log.Debug("MultiShopController_OnPurchase " + self.gameObject.name);
             if (NetworkServer.active)
             {
                 int charges = 0;
-                foreach (GameObject obj in self._terminalGameObjects)
+                foreach (GameObject obj in self.terminalGameObjects)
                 {
                     if (obj.GetComponent<PurchaseInteraction>().Networkavailable)
+                    {
+                        charges++;
+                    }
+                }
+
+                uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
+                SetCharges(netId, charges);
+            }
+        }
+
+
+        private static void DroneVendorMultiShopController_OnPurchase(On.RoR2.DroneVendorMultiShopController.orig_OnPurchase orig, DroneVendorMultiShopController self, CostTypeDef.PayCostContext payCostContext, CostTypeDef.PayCostResults payCostResult)
+        {
+            orig(self, payCostContext, payCostResult);
+
+            Log.Debug("DroneVendorMultiShopController_OnPurchase " + self.gameObject.name);
+            if (NetworkServer.active)
+            {
+                int charges = 0;
+                foreach (var obj in self._terminals)
+                {
+                    if (obj.NetworkcurrentPickup != UniquePickup.none)
                     {
                         charges++;
                     }

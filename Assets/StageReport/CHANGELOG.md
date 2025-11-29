@@ -1,3 +1,7 @@
+## 1.4.0
+1. Added Alloyed Collective support
+2. Added Alloyed Collective interactables and drones to the recap
+
 ## 1.3.0
 1. Added Seekers of the Storm support
 2. Added Seekers of the Storm interactables

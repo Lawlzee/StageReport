@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49a8e7e0d0e08da428a79d57d8d6d842, type: 3}
-  m_Name: EmergencyDrone
+  m_Name: TemporaryItemsShopTerminal
   m_EditorClassIdentifier: 
-  type: 36
-  nameToken: EMERGENCYDRONE_BODY_NAME
-  texture: {fileID: 0}
-  textureKey: RoR2/Base/Drones/texEmergencyDroneIcon.png
+  type: 53
+  nameToken: TEMPORARYITEMSSHOP_TERMINAL_NAME
+  texture: {fileID: 2800000, guid: aa377bdab83ba8545a53b8361896e5b5, type: 3}
+  textureKey: 
   charges: 1
-  defaultScoreWeight: 0
+  defaultScoreWeight: 25
   unstackable: 0
   gameObjectNames:
-  - EmergencyDroneBroken(Clone)
+  - TemporaryItemsShopTerminal(Clone)

@@ -2,7 +2,6 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
   tags:
   - Colored
   - BulletCollide
@@ -22,8 +21,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Projectile Pierce
+  - SolusEye
   - FakeActor
   - NoCollision
   - Pickups
@@ -41,14 +40,13 @@ TagManager:
   - PlayerBody
   - EnemyBody
   - TriggerZone
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - SplitscreenPlayerMain
+  - SplitscreenPlayer2
+  - SplitscreenPlayer3
+  - SplitscreenPlayer4
+  - ProjectileWorldOnly
+  - EnemyBarrier
+  - PlayerFakeActor
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49a8e7e0d0e08da428a79d57d8d6d842, type: 3}
-  m_Name: EmergencyDrone
+  m_Name: DroneCombinerStation
   m_EditorClassIdentifier: 
-  type: 36
-  nameToken: EMERGENCYDRONE_BODY_NAME
-  texture: {fileID: 0}
-  textureKey: RoR2/Base/Drones/texEmergencyDroneIcon.png
-  charges: 1
+  type: 57
+  nameToken: DRONE_COMBINER_NAME
+  texture: {fileID: 2800000, guid: fd4a08b080823ae45a83b2018635a822, type: 3}
+  textureKey: 
+  charges: 0
   defaultScoreWeight: 0
   unstackable: 0
   gameObjectNames:
-  - EmergencyDroneBroken(Clone)
+  - DroneCombinerStation(Clone)

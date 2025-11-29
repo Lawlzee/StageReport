@@ -73,6 +73,20 @@ namespace StageReport
 
         ShrineColossusAccess,
         ShrineHalcyonite,
-        Geode
+        Geode,
+
+        TemporaryItemsShopTerminal,
+        TripleDroneShop,
+        AccessCodesNode,
+        DroneScrapper,
+        DroneCombinerStation,
+
+        BombardmentDrone,
+        CleanUpDrone,
+        CopycatDrone,
+        HaulerDrone,
+        JailerDrone,
+        JunkDrone,
+        RechargeDrone
     }
 }

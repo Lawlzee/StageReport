@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49a8e7e0d0e08da428a79d57d8d6d842, type: 3}
-  m_Name: EmergencyDrone
+  m_Name: CleanUpDrone
   m_EditorClassIdentifier: 
-  type: 36
-  nameToken: EMERGENCYDRONE_BODY_NAME
+  type: 59
+  nameToken: DRONE_CLEANUP_BODY_NAME
   texture: {fileID: 0}
-  textureKey: RoR2/Base/Drones/texEmergencyDroneIcon.png
+  textureKey: RoR2/DLC3/Drones/texCleanUpDroneIcon.png
   charges: 1
   defaultScoreWeight: 0
   unstackable: 0
   gameObjectNames:
-  - EmergencyDroneBroken(Clone)
+  - CleanupDroneBroken(Clone)

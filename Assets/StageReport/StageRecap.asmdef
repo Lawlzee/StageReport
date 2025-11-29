@@ -1,8 +1,8 @@
 {
     "name": "StageRecap",
+    "rootNamespace": "",
     "references": [
-        "com.unity.multiplayer-hlapi.Runtime",
-        "Unity.Postprocessing.Runtime"
+        "com.unity.multiplayer-hlapi.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -27,7 +27,9 @@
         "RiskOfOptions.dll",
         "R2API.Language.dll",
         "Wwise.dll",
-        "Rewired_Core.dll"
+        "Rewired_Core.dll",
+        "Unity.Postprocessing.Runtime.dll",
+        ""
     ],
     "autoReferenced": true,
     "defineConstraints": [],
