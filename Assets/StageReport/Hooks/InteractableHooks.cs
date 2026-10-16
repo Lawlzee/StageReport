@@ -1,4 +1,4 @@
-﻿using RoR2;
+using RoR2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,8 @@ namespace StageReport
     {
         public static void Init()
         {
+            On.RoR2.WakeController.Start += WakeController_Start;
+            On.RoR2.WakeController.OnMissionStatusChanged += WakeController_OnMissionStatusChanged;
             On.RoR2.PurchaseInteraction.PreStartClient += PurchaseInteraction_PreStartClient;
             On.RoR2.PurchaseInteraction.OnDisable += PurchaseInteraction_OnDisable;
             On.RoR2.ShrineChanceBehavior.AddShrineStack += ShrineChanceBehavior_AddShrineStack;
@@ -34,6 +36,36 @@ namespace StageReport
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.CharacterDeathBehavior.OnDeath += CharacterDeathBehavior_OnDeath;
             On.RoR2.ShopTerminalBehavior.UpdatePickupDisplayAndAnimations += ShopTerminalBehavior_UpdatePickupDisplayAndAnimations;
+        }
+
+        private static void WakeController_Start(On.RoR2.WakeController.orig_Start orig, WakeController self)
+        {
+            orig(self);
+            UpdateWakeAltar(self);
+        }
+
+        private static void WakeController_OnMissionStatusChanged(On.RoR2.WakeController.orig_OnMissionStatusChanged orig,
+            WakeController self, WakeController.MissionStatus status)
+        {
+            orig(self, status);
+            UpdateWakeAltar(self);
+        }
+
+        private static void UpdateWakeAltar(WakeController altar)
+        {
+            if (!NetworkServer.active || !InteractableTracker.instance || altar.gameObject.name != "WakeAltar(Clone)") return;
+            var identity = altar.GetComponent<NetworkIdentity>();
+            if (identity == null || identity.netId.Value == 0) return;
+            if (!FindInteractableIndex(identity.netId.Value).HasValue)
+                TryRegistering("WakeController", altar);
+            // Count activation, as with other single-use event shrines.
+            if (altar.missionStatus != WakeController.MissionStatus.Idle)
+                SetCharges(identity.netId.Value, 0);
+        }
+
+        public static void RefreshWakeAltars()
+        {
+            foreach (var altar in UnityEngine.Object.FindObjectsOfType<WakeController>()) UpdateWakeAltar(altar);
         }
 
         private static void AccessCodesMissionController_OnStartServer(On.RoR2.AccessCodesMissionController.orig_OnStartServer orig, AccessCodesMissionController self)
@@ -78,6 +110,27 @@ namespace StageReport
         private static void ShopTerminalBehavior_UpdatePickupDisplayAndAnimations(On.RoR2.ShopTerminalBehavior.orig_UpdatePickupDisplayAndAnimations orig, ShopTerminalBehavior self)
         {
             orig(self);
+            UpdatePrinterItem(self);
+        }
+
+        public static void RefreshPrinterItems()
+        {
+            if (!NetworkServer.active || !InteractableTracker.instance)
+            {
+                return;
+            }
+            foreach (var terminal in UnityEngine.Object.FindObjectsOfType<ShopTerminalBehavior>())
+            {
+                UpdatePrinterItem(terminal);
+            }
+        }
+
+        private static void UpdatePrinterItem(ShopTerminalBehavior self)
+        {
+            if (!NetworkServer.active || !InteractableTracker.instance)
+            {
+                return;
+            }
             if (self.pickup.pickupIndex == PickupIndex.none)
             {
                 return;
@@ -99,7 +152,11 @@ namespace StageReport
             }
 
             PickupDef pickupDef = PickupCatalog.GetPickupDef(self.pickup.pickupIndex);
-            ItemDef itemDef = ItemCatalog.GetItemDef(pickupDef.itemIndex);
+            ItemDef itemDef = pickupDef != null ? ItemCatalog.GetItemDef(pickupDef.itemIndex) : null;
+            if (itemDef == null)
+            {
+                return;
+            }
             trackedInteractable.itemIndex = itemDef.itemIndex;
 
 
@@ -112,7 +169,7 @@ namespace StageReport
             if (NetworkServer.active)
             {
                 uint netId = self.GetComponent<NetworkIdentity>().netId.Value;
-                SetCharges(netId, 0);
+                SetCharges(netId, 0, logMissing: false);
             }
         }
 
@@ -200,7 +257,8 @@ namespace StageReport
                 {
                     netId = self.GetComponent<NetworkIdentity>().netId.Value,
                     type = interactableDef.type,
-                    charges = interactableDef.charges
+                    charges = interactableDef.charges,
+                    itemIndex = ItemIndex.None
                 };
 
                 InteractableTracker.instance.trackedInteractables.Add(trackedInteractable);
@@ -294,6 +352,11 @@ namespace StageReport
             orig(self);
 
             Log.Debug("PurchaseInteraction_PreStartClient " + self.gameObject.name);
+            var iconDefinition = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
+            if (iconDefinition != null && (iconDefinition.type == InteractableType.CompulsionShrine || iconDefinition.type == InteractableType.HollowChestFree))
+            {
+                if (!string.IsNullOrEmpty(self.displayNameToken)) iconDefinition.nameToken = self.displayNameToken;
+            }
             if (NetworkServer.active)
             {
                 InteractableDef interactableDef = InteractablesCollection.instance.GetByGameObjectName(self.gameObject.name);
@@ -306,12 +369,12 @@ namespace StageReport
 
                 Log.Debug(interactableDef.type + " found");
 
-                int index = InteractableTracker.instance.trackedInteractables.Count;
                 var trackedInteractable = new TrackedInteractable
                 {
                     netId = self.GetComponent<NetworkIdentity>().netId.Value,
                     type = interactableDef.type,
-                    charges = interactableDef.charges
+                    charges = interactableDef.charges,
+                    itemIndex = ItemIndex.None
                 };
 
                 InteractableTracker.instance.trackedInteractables.Add(trackedInteractable);
@@ -326,14 +389,24 @@ namespace StageReport
 
                 self.onPurchase.AddListener(interactor =>
                 {
-                    trackedInteractable.charges = Mathf.Max(0, trackedInteractable.charges - 1);
-                    InteractableTracker.instance.trackedInteractables[index] = trackedInteractable;
+                    // Entries can be removed after registration; resolve the current index.
+                    var index = FindInteractableIndex(trackedInteractable.netId);
+                    if (index.HasValue)
+                    {
+                        var current = InteractableTracker.instance.trackedInteractables[index.Value];
+                        SetCharges(current.netId, Mathf.Max(0, current.charges - 1));
+                    }
                 });
             }
         }
 
         public static int? FindInteractableIndex(uint netId)
         {
+            if (!InteractableTracker.instance || InteractableTracker.instance.trackedInteractables == null)
+            {
+                return null;
+            }
+
             return InteractableTracker.instance.trackedInteractables
                 .Select((x, i) => (
                     netId: x.netId,
@@ -344,13 +417,15 @@ namespace StageReport
                 .FirstOrDefault();
         }
 
-        private static bool SetCharges(uint netId, int charges)
+        private static bool SetCharges(uint netId, int charges, bool logMissing = true)
         {
             int? index = FindInteractableIndex(netId);
 
             if (index == null)
             {
-                Log.Debug("index == null. netId = " + netId);
+                if (logMissing)
+                    Log.Debug("Missing tracked interactable. netId = " + netId);
+
                 return false;
             }
 

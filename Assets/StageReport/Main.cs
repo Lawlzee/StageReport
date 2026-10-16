@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using RiskOfOptions;
 using RiskOfOptions.OptionConfigs;
@@ -38,6 +38,9 @@ namespace StageReport
 
             RoR2Application.onLoad += () =>
             {
+                R2API.LanguageAPI.Add("STAGERECAP_HOLLOW_CHEST_FREE_NAME", "Concept Reliquary");
+                R2API.LanguageAPI.Add("STAGERECAP_COMPULSION_SHRINE_NAME", "Shrine of Compulsion");
+                R2API.LanguageAPI.Add("STAGERECAP_WAKE_ALTAR_NAME", "Wake Altar");
                 ModConfig.Init(Config);
             };
 

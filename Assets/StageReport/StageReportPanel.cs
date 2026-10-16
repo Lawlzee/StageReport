@@ -1,4 +1,4 @@
-﻿using RoR2;
+using RoR2;
 using RoR2.UI;
 using RoR2.UI.SkinControllers;
 using System;
@@ -96,11 +96,41 @@ namespace StageReport
             StartCoroutine(RenderInteractables(textMesh, trackedInteractables));
         }
 
+        private IEnumerator LoadPrinterIcon(RawImage image, ItemDef itemDef)
+        {
+            Sprite sprite = itemDef.pickupIconSprite;
+            if (sprite == null)
+            {
+                var reference = itemDef.GetIconReference();
+                if (reference == null || !reference.RuntimeKeyIsValid())
+                {
+                    Log.Error("Printer icon has no valid sprite reference: " + itemDef.name);
+                    yield break;
+                }
+                var handle = Addressables.LoadAssetAsync<Sprite>(reference.RuntimeKey);
+                // Keep the sprite alive for the lifetime of the recap panel.
+                OnDestroyCallback.AddCallback(gameObject, _ => Addressables.Release(handle));
+                yield return handle;
+                if (handle.Status != UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                {
+                    Log.Error("Could not load printer icon for " + itemDef.name + ": " + handle.OperationException);
+                    yield break;
+                }
+                sprite = handle.Result;
+            }
+            if (image == null || sprite == null) yield break;
+            image.texture = sprite.texture;
+            var rect = sprite.textureRect;
+            image.uvRect = new Rect(rect.x / sprite.texture.width, rect.y / sprite.texture.height,
+                rect.width / sprite.texture.width, rect.height / sprite.texture.height);
+            image.color = Color.white;
+            image.enabled = true;
+            Log.Debug("Printer icon loaded: " + itemDef.name);
+        }
+
         private IEnumerator RenderInteractables(HGTextMeshProUGUI textMesh, IList<TrackedInteractable> trackedInteractables)
         {
             yield return new WaitForSeconds(interactableShowInitialDelay);
-
-            GameObject interactableIconPrefab = Addressables.LoadAssetAsync<GameObject>(interactableIconPrefabKey).WaitForCompletion();
 
             var interactableGroups = trackedInteractables
                 .Where(x => Application.isEditor || ModConfig.visibleInteractables[x.type].Value)
@@ -133,12 +163,11 @@ namespace StageReport
 
             foreach (var interactableGroup in interactableGroups)
             {
-                var interactableIcon = Instantiate(interactableIconPrefab, interactablePanel.transform);
-
-                interactableIcon.transform.Find("Timer").gameObject.SetActive(false);
+                var interactableIcon = CreateRecapIcon(textMesh);
 
                 RawImage rawImage = interactableIcon.GetComponent<RawImage>();
                 rawImage.texture = interactableGroup.def.Texture;
+                rawImage.enabled = rawImage.texture != null;
 
                 var stackText = interactableIcon.transform.GetChild(0);
                 HGTextMeshProUGUI stackLabel = stackText.GetComponent<HGTextMeshProUGUI>();
@@ -150,7 +179,17 @@ namespace StageReport
                     GameObject itemIcon = Instantiate(printerItemIconPrefab, interactableIcon.transform);
                     if (!Application.isEditor)
                     {
-                        itemIcon.GetComponent<RawImage>().texture = ItemCatalog.GetItemDef(interactableGroup.itemIndex).pickupIconTexture;
+                        var itemDef = ItemCatalog.GetItemDef(interactableGroup.itemIndex);
+                        if (itemDef != null)
+                        {
+                            var image = itemIcon.GetComponent<RawImage>();
+                            image.enabled = false;
+                            StartCoroutine(LoadPrinterIcon(image, itemDef));
+                        }
+                        else
+                        {
+                            itemIcon.SetActive(false);
+                        }
                     }
                 }
                 else if (interactableGroup.def.charges == 0)
@@ -176,6 +215,34 @@ namespace StageReport
                 textMesh.text = $"{stageLabelText} - {Mathf.CeilToInt(percent)}%";
                 yield return new WaitForSeconds(interactableShowDelay);
             }
+        }
+
+        private GameObject CreateRecapIcon(HGTextMeshProUGUI heading)
+        {
+            // Own this simple UI instead of relying on the game's ItemIcon hierarchy.
+            var icon = new GameObject("StageRecapIcon", typeof(RectTransform),
+                typeof(CanvasRenderer), typeof(RawImage), typeof(TooltipProvider));
+            icon.transform.SetParent(interactablePanel.transform, false);
+            icon.GetComponent<RectTransform>().sizeDelta = new Vector2(64, 64);
+
+            var counter = new GameObject("Counter", typeof(RectTransform),
+                typeof(CanvasRenderer), typeof(HGTextMeshProUGUI));
+            counter.transform.SetParent(icon.transform, false);
+            var counterRect = counter.GetComponent<RectTransform>();
+            counterRect.anchorMin = Vector2.zero;
+            counterRect.anchorMax = Vector2.one;
+            counterRect.offsetMin = new Vector2(0, -8);
+            counterRect.offsetMax = new Vector2(8, 0);
+
+            var label = counter.GetComponent<HGTextMeshProUGUI>();
+            label.font = heading.font;
+            label.fontSharedMaterial = heading.fontSharedMaterial;
+            label.fontSize = 20;
+            label.alignment = TMPro.TextAlignmentOptions.BottomRight;
+            label.enableWordWrapping = false;
+            label.overflowMode = TMPro.TextOverflowModes.Overflow;
+            label.raycastTarget = false;
+            return icon;
         }
     }
 }

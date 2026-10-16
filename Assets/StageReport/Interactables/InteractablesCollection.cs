@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +17,57 @@ namespace StageReport
         private Dictionary<string, InteractableDef> _interactableByGameObjectName;
         public InteractableDef[] interactables;
 
-        public void Init()
+        public void Init(AssetBundle bundle)
         {
             instance = this;
+
+            // Also support the released bundle, which predates this definition.
+            if (!interactables.Any(x => x.type == InteractableType.HollowChestFree))
+            {
+                var hollowChest = Instantiate(interactables.First(x => x.type == InteractableType.Chest));
+                hollowChest.name = "HollowChestFree";
+                hollowChest.SetRuntimeTexture(null);
+                hollowChest.type = InteractableType.HollowChestFree;
+                hollowChest.nameToken = "STAGERECAP_HOLLOW_CHEST_FREE_NAME";
+                hollowChest.gameObjectNames = new[] { "HollowChestFree(Clone)" };
+                interactables = interactables.Concat(new[] { hollowChest }).ToArray();
+            }
+
+            if (!interactables.Any(x => x.type == InteractableType.CompulsionShrine))
+            {
+                var compulsionShrine = Instantiate(interactables.First(x => x.type == InteractableType.ChanceShrine));
+                compulsionShrine.name = "CompulsionShrine";
+                compulsionShrine.type = InteractableType.CompulsionShrine;
+                compulsionShrine.nameToken = "STAGERECAP_COMPULSION_SHRINE_NAME";
+                compulsionShrine.charges = 1;
+                compulsionShrine.SetRuntimeTexture(null);
+                compulsionShrine.gameObjectNames = new[] { "ShrineCompulsion(Clone)" };
+                interactables = interactables.Concat(new[] { compulsionShrine }).ToArray();
+            }
+
+            if (!interactables.Any(x => x.type == InteractableType.WakeAltar))
+            {
+                var wakeAltar = Instantiate(interactables.First(x => x.type == InteractableType.CombatShrine));
+                wakeAltar.name = "WakeAltar";
+                wakeAltar.type = InteractableType.WakeAltar;
+                wakeAltar.nameToken = "STAGERECAP_WAKE_ALTAR_NAME";
+                wakeAltar.charges = 1;
+                wakeAltar.SetRuntimeTexture(null);
+                wakeAltar.gameObjectNames = new[] { "WakeAltar(Clone)" };
+                interactables = interactables.Concat(new[] { wakeAltar }).ToArray();
+            }
+            var wakeDefinition = interactables.First(x => x.type == InteractableType.WakeAltar);
+            if (wakeDefinition.texture == null) wakeDefinition.SetRuntimeTexture(LoadBundleIcon(bundle, "WakeAltar"));
+
+            // All added interactables use dedicated artwork from the asset bundle.
+            var reliquary = interactables.First(x => x.type == InteractableType.HollowChestFree);
+            if (reliquary.texture == null) reliquary.SetRuntimeTexture(LoadBundleIcon(bundle, "ConceptReliquary"));
+            var compulsion = interactables.First(x => x.type == InteractableType.CompulsionShrine);
+            if (compulsion.texture == null) compulsion.SetRuntimeTexture(LoadBundleIcon(bundle, "CompulsionShrine"));
+
+            var halcyoniteShrine = interactables.First(x => x.type == InteractableType.ShrineHalcyonite);
+            halcyoniteShrine.gameObjectNames = halcyoniteShrine.gameObjectNames
+                .Concat(new[] { "ShrineHalcyonite_Stage1 Variant(Clone)" }).Distinct().ToArray();
 
             _interactableByType = interactables
                 .ToDictionary(x => x.type);
@@ -32,6 +80,14 @@ namespace StageReport
                 .SelectMany(interactable => interactable.gameObjectNames
                     .Select(name => (interactable, name)))
                 .ToDictionary(x => x.name, x => x.interactable);
+        }
+
+        private static Texture2D LoadBundleIcon(AssetBundle bundle, string iconName)
+        {
+            var path = "assets/stagereport/interactables/" + iconName.ToLowerInvariant() + ".png";
+            var texture = bundle != null ? bundle.LoadAsset<Texture2D>(path) : null;
+            if (texture == null) Log.Error(iconName + " icon is missing from stagerecap. Install the matching asset bundle.");
+            return texture;
         }
 
         public InteractableDef GetByGameObjectName(string name)

@@ -1,4 +1,4 @@
-﻿using R2API;
+using R2API;
 using RoR2;
 using RoR2.ContentManagement;
 using System;
@@ -42,7 +42,7 @@ namespace StageReport
 
             yield return LoadAllAssetsAsync(stageReportBundle, args.progressReceiver, (Action<InteractablesCollection[]>)((assets) =>
             {
-                assets.First().Init();
+                assets.First().Init(stageReportBundle);
             }));
             
             yield return LoadAllAssetsAsync(stageReportBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
@@ -53,7 +53,11 @@ namespace StageReport
             
                 foreach (var asset in assets)
                 {
-                    ClientScene.RegisterPrefab(asset);
+                    // UI prefabs are local objects; only network prefabs need registration.
+                    if (asset.GetComponent<NetworkIdentity>() != null)
+                    {
+                        ClientScene.RegisterPrefab(asset);
+                    }
                 }
             }));
         }
