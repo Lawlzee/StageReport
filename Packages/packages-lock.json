@@ -7,13 +7,13 @@
       "dependencies": {}
     },
     "com.passivepicasso.thunderkit": {
-      "version": "https://github.com/PassivePicasso/ThunderKit.git",
+      "version": "https://github.com/PassivePicasso/ThunderKit.git#9.5.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.scriptablebuildpipeline": "1.16.1"
       },
-      "hash": "4d376ec31261e2a1af0c1b41697388e525ee1dd4"
+      "hash": "95a6236df08b0e4bbd5350dd4afdb0927cb7fb6a"
     },
     "com.unity.burst": {
       "version": "1.8.26",
@@ -26,8 +26,15 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.2.0",
+      "version": "2.5.2",
       "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -40,7 +47,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.26",
+      "version": "3.0.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -72,10 +79,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.multiplayer-hlapi": {
-      "version": "file:RoR2MultiplayerHLAPI",
+      "version": "https://github.com/risk-of-thunder/UnityMultiplayerHLAPI.git#1.1.2",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "020f81839097b5508d8170ba35f867a30f6744c0"
     },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.20.1",
@@ -145,6 +153,12 @@
     },
     "riskofthunder-r2api_addressables": {
       "version": "file:R2API_Addressables",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "riskofthunder-r2api_animations": {
+      "version": "file:R2API_Animations",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -348,17 +362,20 @@
       "dependencies": {}
     },
     "riskofthunder-ror2editorkit": {
-      "version": "file:RoR2EditorKit",
+      "version": "https://github.com/risk-of-thunder/RoR2EditorKit.git#6.0.2",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {
+        "com.unity.editorcoroutines": "1.0.0"
+      },
+      "hash": "fe5d4f0dc1d8f4235441d342f2cac0ebcee69021"
     },
     "riskofthunder-ror2importextensions": {
-      "version": "https://github.com/risk-of-thunder/RoR2ImportExtensions.git#1.3.7",
+      "version": "https://github.com/risk-of-thunder/RoR2ImportExtensions.git#1.7.3",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ebe4d6e4a27e4b766b33e5bdd3ab6c7d17518dfb"
+      "hash": "38fa4fe9c8dc16eb7986eaafcdd56e6a7a40a8ca"
     },
     "rune580-risk_of_options": {
       "version": "file:Risk_Of_Options",

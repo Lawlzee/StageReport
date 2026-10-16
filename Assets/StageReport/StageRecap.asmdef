@@ -24,12 +24,10 @@
         "Unity.ResourceManager.dll",
         "R2API.Addressables.dll",
         "R2API.Director.dll",
-        "RiskOfOptions.dll",
         "R2API.Language.dll",
-        "Wwise.dll",
         "Rewired_Core.dll",
         "Unity.Postprocessing.Runtime.dll",
-        ""
+        "RiskOfOptions.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
